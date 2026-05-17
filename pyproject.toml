@@ -1,0 +1,42 @@
+[project]
+name = "quantindicators"
+version = "0.1.0"
+description = "Async technical indicator library for OHLCV data"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.2",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+scipy = [
+    "scipy>=1.13",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "anyio[trio]>=4.0",
+    "scipy>=1.13",
+]
+
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tst/unit"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+fix = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
