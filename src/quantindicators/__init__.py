@@ -76,14 +76,13 @@ from quantindicators.library.weekly_rsi import WeeklyRSI
 from quantindicators.library.wilder_ema import WilderEMA
 from quantindicators.library.williams_r import WilliamsR
 from quantindicators.polars_store import PolarsStore
-from quantindicators.store import AbstractCandleStore, BarCachingStore
+from quantindicators.store import AbstractCandleStore
 
 __all__ = [
     # Base
     "Indicator",
     "IndicatorParameters",
     "AbstractCandleStore",
-    "BarCachingStore",
     "PolarsStore",
     # Moving averages
     "EMA",
