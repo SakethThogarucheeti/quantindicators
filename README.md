@@ -1,6 +1,6 @@
 # quantindicators
 
-Polars-based technical indicator library for OHLCV data. Used by [trading-platform](https://github.com/SakethThogarucheeti/trading-platform) as a local editable dependency.
+Polars-based technical indicator library for OHLCV data. Streaming/incremental: each indicator is constructed against a candle store and computes its current value per call, for use inside a live strategy loop (as opposed to a batch/vectorized pass over full history). Used by [trading-strategy-sdk](https://github.com/SakethThogarucheeti/trading-strategy-sdk) and [trading-platform](https://github.com/SakethThogarucheeti/trading-platform) as a git dependency.
 
 ## Indicators
 
@@ -34,21 +34,17 @@ uv sync --extra scipy
 ## Usage
 
 ```python
-import polars as pl
-from quantindicators import PolarsIndicatorStore
+from quantindicators import EMA, ATR, RSI
+from quantindicators.polars_store import PolarsStore
 
-store = PolarsIndicatorStore()
+store = PolarsStore()
+store.push("RELIANCE", "15min", candle_row)
 
-# df is a Polars DataFrame with columns: open, high, low, close, volume, timestamp
-store.update(df)
-
-ema = store.ema(period=9)        # pl.Series
-rsi = store.rsi(period=14)       # pl.Series
-atr = store.atr(period=14)       # pl.Series
-vwap = store.vwap()              # pl.Series
+ema = EMA(store, "RELIANCE", "15min")
+value = await ema.compute(EMA.Parameters(period=9))
 ```
 
-Each indicator call returns a `pl.Series` aligned to the input DataFrame rows.
+Indicators are constructed with runtime dependencies (store, symbol, interval) and called with configuration parameters per `compute()` call — each call returns the indicator's current value from the store's most recent candles, not a full historical series.
 
 ## Testing
 
@@ -58,11 +54,11 @@ uv run pytest
 
 ## Used by
 
-[trading-platform](https://github.com/SakethThogarucheeti/trading-platform) installs this as an editable dependency via:
+[trading-strategy-sdk](https://github.com/SakethThogarucheeti/trading-strategy-sdk) and [trading-platform](https://github.com/SakethThogarucheeti/trading-platform) install this as a git dependency:
 
 ```toml
 [tool.uv.sources]
-quantindicators = { path = "../quantindicators", editable = true }
+quantindicators = { git = "https://github.com/SakethThogarucheeti/quantindicators.git" }
 ```
 
-Clone both repos into the same parent directory for this to resolve correctly.
+No local checkout or shared parent directory required — this is a standalone, independently installable package, same pattern as `trading-types`, `trading-strategy-sdk`, and `trading-risk-sdk`.
