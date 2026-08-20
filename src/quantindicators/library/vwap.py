@@ -28,7 +28,7 @@ class VWAP(Indicator):
 
     alias = "vwap"
 
-    async def compute(self, params: Parameters) -> float | None:  # type: ignore[override]
+    async def compute(self, params: Parameters) -> float | None:
         rows = await self._store.fetch_since(self._symbol, self._interval, params.session_open_utc)
         if not rows:
             return None

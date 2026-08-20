@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -62,13 +62,25 @@ class Indicator(ABC):
     # ------------------------------------------------------------------
 
     @abstractmethod
-    async def compute(self, params: IndicatorParameters) -> float | None:
+    async def compute(self, params: Any) -> float | None:
         """
         Fetch candles and return the current indicator value.
 
         Returns None when there are fewer bars than required (warmup not done).
         Implementations must call ``self._store.fetch(...)`` for data.
         Configuration (period, multiplier, etc.) comes from ``params``.
+
+        Typed as ``Any`` rather than ``IndicatorParameters`` deliberately: every
+        subclass narrows this to its own nested ``Parameters`` type (e.g.
+        ``async def compute(self, params: RSI.Parameters)``), which a stricter
+        base signature would reject as a Liskov violation on every override.
+        Nothing dispatches on this method polymorphically through the base
+        type — every real call site already knows the concrete subclass
+        statically (``RSI(...).compute(RSI.Parameters(...))``), except
+        ``Indicator.lookup(alias)`` below, which is a Factory Method boundary
+        where type erasure is correct, not a defect. ``Any`` here lets each
+        override keep its own precisely-checked parameter type instead of
+        every subclass needing a ``# type: ignore[override]``.
         """
 
     # ------------------------------------------------------------------

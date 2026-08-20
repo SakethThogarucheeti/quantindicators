@@ -36,7 +36,7 @@ class ChaikinVolatility(Indicator):
     def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
         super().__init__(store, symbol, interval)
 
-    async def compute(self, params: Parameters) -> float | None:  # type: ignore[override]
+    async def compute(self, params: Parameters) -> float | None:
         limit = (params.ema_period + params.roc_period) * _LOOKBACK_FACTOR
         rows = await self._store.fetch(self._symbol, self._interval, limit)
         if len(rows) < params.ema_period + params.roc_period:

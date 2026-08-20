@@ -54,7 +54,7 @@ class SqueezeMomentum(Indicator):
     def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
         super().__init__(store, symbol, interval)
 
-    async def compute(self, params: Parameters) -> float | None:  # type: ignore[override]
+    async def compute(self, params: Parameters) -> float | None:
         limit = params.period * _LOOKBACK
         rows = await self._store.fetch(self._symbol, self._interval, limit)
         if len(rows) < params.period:

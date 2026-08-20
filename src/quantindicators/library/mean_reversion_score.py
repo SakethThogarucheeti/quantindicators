@@ -58,7 +58,7 @@ class MeanReversionScore(Indicator):
     def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
         super().__init__(store, symbol, interval)
 
-    async def compute(self, params: Parameters) -> float | None:  # type: ignore[override]
+    async def compute(self, params: Parameters) -> float | None:
         needed = max(params.period, params.rsi_period + 1) * _LOOKBACK
         rows = await self._store.fetch(self._symbol, self._interval, needed)
         if len(rows) < max(params.period, params.rsi_period + 1):

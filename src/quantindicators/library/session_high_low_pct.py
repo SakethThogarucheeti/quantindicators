@@ -29,7 +29,7 @@ class SessionHighLowPct(Indicator):
 
     alias = "session_hl_pct"
 
-    async def compute(self, params: Parameters) -> float | None:  # type: ignore[override]
+    async def compute(self, params: Parameters) -> float | None:
         rows = await self._store.fetch_since(self._symbol, self._interval, params.session_open_utc)
         if len(rows) < 2:
             return None

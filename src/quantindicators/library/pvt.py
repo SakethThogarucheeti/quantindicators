@@ -35,7 +35,7 @@ class PVT(Indicator):
     def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
         super().__init__(store, symbol, interval)
 
-    async def compute(self, params: Parameters) -> float | None:  # type: ignore[override]
+    async def compute(self, params: Parameters) -> float | None:
         # Need period+1 bars to compute period pct-changes, then z-score
         rows = await self._store.fetch(self._symbol, self._interval, params.period + 1)
         if len(rows) < params.period + 1:

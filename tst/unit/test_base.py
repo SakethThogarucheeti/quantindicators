@@ -80,12 +80,12 @@ def test_duplicate_alias_raises() -> None:
         class _DupEMA(Indicator):
             alias = "ema"
 
-            async def compute(self, params): ...  # type: ignore[override]
+            async def compute(self, params): ...
 
 
 def test_missing_alias_is_allowed_for_abstract_intermediates() -> None:
     class _AbstractMid(Indicator):
-        async def compute(self, params): ...  # type: ignore[override]
+        async def compute(self, params): ...
 
     # No alias → no registration, no error
     from quantindicators.base import _REGISTRY
@@ -99,7 +99,7 @@ def test_empty_alias_raises() -> None:
         class _Bad(Indicator):
             alias = ""
 
-            async def compute(self, params): ...  # type: ignore[override]
+            async def compute(self, params): ...
 
 
 def test_lookup_raises_for_unknown_alias() -> None:

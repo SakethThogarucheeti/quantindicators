@@ -40,7 +40,7 @@ class ConnorsRSI(Indicator):
     def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
         super().__init__(store, symbol, interval)
 
-    async def compute(self, params: Parameters) -> float | None:  # type: ignore[override]
+    async def compute(self, params: Parameters) -> float | None:
         limit = params.rank_period + params.rsi_period * _LOOKBACK + 1
         rows = await self._store.fetch(self._symbol, self._interval, limit)
         min_bars = max(params.rsi_period + 1, params.streak_period + 1, params.rank_period + 1)
