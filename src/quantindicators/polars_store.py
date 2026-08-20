@@ -30,11 +30,26 @@ class PolarsStore(AbstractCandleStore):
         self._maxlen = maxlen
 
     def push(self, symbol: str, interval: str, row: CandleRow) -> None:
-        """Append a candle row dict to the rolling buffer."""
+        """
+        Append a candle row dict to the rolling buffer.
+
+        If the incoming row's ts matches the most recently pushed row for
+        this (symbol, interval), it replaces it instead of appending a
+        second copy. Redelivery of the same bar happens in practice — e.g.
+        a live feed replaying a warmup-seeded bar again right after
+        replaying historical candles at startup — and a bare append would
+        silently double-count that bar's contribution in every downstream
+        indicator (RSI/ATR/EMA) computed over this buffer, all of which
+        weight by *position in the window* rather than by timestamp.
+        """
         key = (symbol, interval)
         if key not in self._buffers:
             self._buffers[key] = deque(maxlen=self._maxlen)
-        self._buffers[key].append(row)
+        buf = self._buffers[key]
+        if buf and buf[-1]["ts"] == row["ts"]:
+            buf[-1] = row
+        else:
+            buf.append(row)
 
     # ------------------------------------------------------------------
     # AbstractCandleStore async interface

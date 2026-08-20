@@ -1,14 +1,12 @@
-"""Tests for quantindicators store implementations: PolarsStore and BarCachingStore."""
+"""Tests for quantindicators store implementations: PolarsStore."""
 
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
 from quantindicators.polars_store import PolarsStore
-from quantindicators.store import AbstractCandleStore, BarCachingStore
 
 
 @pytest.mark.asyncio
@@ -68,6 +66,54 @@ async def test_polars_store_fetch_since_filters_correctly() -> None:
 
 
 @pytest.mark.asyncio
+async def test_polars_store_push_same_ts_replaces_not_appends() -> None:
+    """
+    Regression: redelivery of the same bar (e.g. a live feed replaying a
+    warmup-seeded candle again right after startup replay) must not create
+    a duplicate entry — every downstream indicator (RSI/ATR/EMA) weights by
+    position in the window, so a silent duplicate biases the result.
+    """
+    store = PolarsStore()
+    ts = datetime(2024, 1, 1, 9, 15, tzinfo=UTC)
+    first = {"symbol": "E", "interval": "1min", "ts": ts, "open": 100.0,
+             "high": 101.0, "low": 99.0, "close": 100.5, "volume": 500}
+    redelivered = {"symbol": "E", "interval": "1min", "ts": ts, "open": 100.0,
+                   "high": 101.0, "low": 99.0, "close": 100.5, "volume": 500}
+    store.push("E", "1min", first)
+    store.push("E", "1min", redelivered)
+    result = await store.fetch("E", "1min", 10)
+    assert len(result) == 1
+
+
+@pytest.mark.asyncio
+async def test_polars_store_push_same_ts_uses_latest_values() -> None:
+    """A redelivered bar with revised OHLC replaces the stale copy in place."""
+    store = PolarsStore()
+    ts = datetime(2024, 1, 1, 9, 15, tzinfo=UTC)
+    store.push("F", "1min", {"symbol": "F", "interval": "1min", "ts": ts, "open": 100.0,
+                              "high": 101.0, "low": 99.0, "close": 100.5, "volume": 500})
+    store.push("F", "1min", {"symbol": "F", "interval": "1min", "ts": ts, "open": 100.0,
+                              "high": 102.0, "low": 99.0, "close": 101.0, "volume": 900})
+    result = await store.fetch("F", "1min", 10)
+    assert len(result) == 1
+    assert result[0]["close"] == 101.0
+    assert result[0]["volume"] == 900
+
+
+@pytest.mark.asyncio
+async def test_polars_store_push_different_ts_still_appends() -> None:
+    store = PolarsStore()
+    base = datetime(2024, 1, 1, 9, 0, tzinfo=UTC)
+    from datetime import timedelta
+    store.push("G", "1min", {"symbol": "G", "interval": "1min", "ts": base,
+                              "open": 1.0, "high": 1.0, "low": 1.0, "close": 1.0, "volume": 1})
+    store.push("G", "1min", {"symbol": "G", "interval": "1min", "ts": base + timedelta(minutes=1),
+                              "open": 1.0, "high": 1.0, "low": 1.0, "close": 2.0, "volume": 1})
+    result = await store.fetch("G", "1min", 10)
+    assert len(result) == 2
+
+
+@pytest.mark.asyncio
 async def test_polars_store_respects_maxlen() -> None:
     from datetime import timedelta
     store = PolarsStore(maxlen=5)
@@ -79,67 +125,3 @@ async def test_polars_store_respects_maxlen() -> None:
     result = await store.fetch("D", "1min", 100)
     assert len(result) == 5
     assert result[0]["close"] == 5.0  # oldest kept is index 5
-
-
-# ---------------------------------------------------------------------------
-# BarCachingStore
-# ---------------------------------------------------------------------------
-
-
-def _make_inner(rows: list) -> AbstractCandleStore:
-    inner = MagicMock(spec=AbstractCandleStore)
-    inner.fetch = AsyncMock(return_value=rows)
-    inner.fetch_since = AsyncMock(return_value=rows)
-    return inner
-
-
-@pytest.mark.asyncio
-async def test_bar_caching_store_deduplicates_fetch() -> None:
-    rows = [{"close": 1.0}]
-    inner = _make_inner(rows)
-    store = BarCachingStore(inner)
-
-    r1 = await store.fetch("INFY", "15min", 10)
-    r2 = await store.fetch("INFY", "15min", 10)
-
-    assert r1 == r2 == rows
-    inner.fetch.assert_called_once()  # only one real call despite two fetches
-
-
-@pytest.mark.asyncio
-async def test_bar_caching_store_deduplicates_fetch_since() -> None:
-    rows = [{"close": 2.0}]
-    inner = _make_inner(rows)
-    store = BarCachingStore(inner)
-    since = datetime(2024, 1, 1, tzinfo=UTC)
-
-    r1 = await store.fetch_since("INFY", "15min", since)
-    r2 = await store.fetch_since("INFY", "15min", since)
-
-    assert r1 == r2 == rows
-    inner.fetch_since.assert_called_once()
-
-
-@pytest.mark.asyncio
-async def test_bar_caching_store_invalidate_clears_cache() -> None:
-    rows = [{"close": 3.0}]
-    inner = _make_inner(rows)
-    store = BarCachingStore(inner)
-
-    await store.fetch("INFY", "15min", 10)
-    store.invalidate()
-    await store.fetch("INFY", "15min", 10)
-
-    assert inner.fetch.call_count == 2  # second fetch hit the inner store again
-
-
-@pytest.mark.asyncio
-async def test_bar_caching_store_different_keys_not_deduplicated() -> None:
-    inner = _make_inner([])
-    store = BarCachingStore(inner)
-
-    await store.fetch("INFY", "15min", 10)
-    await store.fetch("INFY", "15min", 20)  # different limit
-    await store.fetch("TCS", "15min", 10)   # different symbol
-
-    assert inner.fetch.call_count == 3
