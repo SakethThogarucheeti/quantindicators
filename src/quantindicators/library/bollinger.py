@@ -30,9 +30,6 @@ class BollingerBands(Indicator):
 
     alias = "bollinger"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         result = await self.compute_full(params)
         return result[4] if result is not None else None  # percent_b

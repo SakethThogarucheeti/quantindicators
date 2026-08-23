@@ -33,9 +33,6 @@ class ATR(Indicator):
 
     alias = "atr"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         rows = await self._store.fetch(
             self._symbol, self._interval, params.period * _LOOKBACK_FACTOR

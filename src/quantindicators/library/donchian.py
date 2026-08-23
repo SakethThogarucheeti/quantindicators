@@ -31,9 +31,6 @@ class DonchianChannels(Indicator):
 
     alias = "donchian"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         result = await self.compute_full(params)
         if result is None:

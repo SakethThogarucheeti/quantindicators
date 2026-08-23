@@ -33,9 +33,6 @@ class ADX(Indicator):
 
     alias = "adx"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         result = await self.compute_full(params)
         return result[0] if result is not None else None

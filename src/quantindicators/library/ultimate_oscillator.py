@@ -32,9 +32,6 @@ class UltimateOscillator(Indicator):
 
     alias = "ultimate_oscillator"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         if not (params.period1 < params.period2 < params.period3):
             return None
