@@ -34,9 +34,6 @@ class OpeningRangePosition(Indicator):
 
     alias = "opening_range"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         # Fetch enough to cover the opening range + some prior session
         limit = params.range_bars + 60

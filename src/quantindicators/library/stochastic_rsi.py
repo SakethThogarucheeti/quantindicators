@@ -55,9 +55,6 @@ class StochasticRSI(Indicator):
 
     alias = "stochastic_rsi"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         needed = (params.rsi_period + params.stoch_period) * _LOOKBACK
         rows = await self._store.fetch(self._symbol, self._interval, needed)

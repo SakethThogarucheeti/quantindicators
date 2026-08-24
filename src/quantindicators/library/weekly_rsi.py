@@ -37,9 +37,6 @@ class WeeklyRSI(Indicator):
 
     alias = "weekly_rsi"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         needed = (params.rsi_period + 1) * params.week_bars * _LOOKBACK
         rows = await self._store.fetch(self._symbol, self._interval, needed)

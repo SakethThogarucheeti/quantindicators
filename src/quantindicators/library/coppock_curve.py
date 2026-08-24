@@ -41,9 +41,6 @@ class CoppockCurve(Indicator):
 
     alias = "coppock_curve"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         needed = (params.wma_period + max(params.roc1_period, params.roc2_period)) * _LOOKBACK
         rows = await self._store.fetch(self._symbol, self._interval, needed)

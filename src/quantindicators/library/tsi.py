@@ -43,9 +43,6 @@ class TSI(Indicator):
 
     alias = "tsi"
 
-    def __init__(self, store: AbstractCandleStore, symbol: str, interval: str) -> None:
-        super().__init__(store, symbol, interval)
-
     async def compute(self, params: Parameters) -> float | None:
         if params.slow <= params.fast:
             return None
