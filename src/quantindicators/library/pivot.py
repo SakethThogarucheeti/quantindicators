@@ -2,12 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from quantindicators.base import Indicator, IndicatorParameters
-
-if TYPE_CHECKING:
-    from quantindicators.store import AbstractCandleStore
 
 class PivotPoints(Indicator):
     """

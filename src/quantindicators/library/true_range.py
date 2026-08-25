@@ -2,14 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import numpy as np
 
 from quantindicators.base import Indicator, IndicatorParameters
-
-if TYPE_CHECKING:
-    from quantindicators.store import AbstractCandleStore
 
 
 def true_range(highs: np.ndarray, lows: np.ndarray, closes: np.ndarray) -> np.ndarray:

@@ -2,16 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
 from quantindicators.library.ema_series import ema_series as _ema
-
-if TYPE_CHECKING:
-    pass
 
 _LOOKBACK = 3
 

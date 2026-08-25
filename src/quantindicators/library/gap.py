@@ -3,14 +3,9 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
-
-if TYPE_CHECKING:
-    from quantindicators.store import AbstractCandleStore
 
 # Gap between bars > this threshold = different session (in minutes of bar time)
 _SESSION_GAP_MINUTES = 30

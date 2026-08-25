@@ -2,16 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
 from quantindicators.library.true_range import true_range
-
-if TYPE_CHECKING:
-    from quantindicators.store import AbstractCandleStore
 
 
 class UltimateOscillator(Indicator):

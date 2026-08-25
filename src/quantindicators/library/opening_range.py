@@ -3,14 +3,9 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
-
-if TYPE_CHECKING:
-    from quantindicators.store import AbstractCandleStore
 
 _SESSION_GAP_MINUTES = 30
 

@@ -2,16 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
 from quantindicators.library.wilder_ema import wilder_ema
-
-if TYPE_CHECKING:
-    from quantindicators.store import AbstractCandleStore
 
 # Fetch 3Ã— the period so the EWM seed bias has decayed to negligible levels
 # before the value we return. This matches the warmup approach used by the

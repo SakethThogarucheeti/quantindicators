@@ -3,14 +3,9 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING
-
 import numpy as np
 
 from quantindicators.base import Indicator, IndicatorParameters
-
-if TYPE_CHECKING:
-    from quantindicators.store import AbstractCandleStore
 
 
 class VWAP(Indicator):
