@@ -7,8 +7,6 @@ from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
 
-_LOOKBACK = 2
-
 
 class CandleBodyRatio(Indicator):
     """
@@ -31,23 +29,9 @@ class CandleBodyRatio(Indicator):
     alias = "candle_body_ratio"
 
     async def compute(self, params: Parameters) -> float | None:
-        cols = await self._fetch_columns(
-            params.period * _LOOKBACK, "open", "high", "low", "close", min_len=params.period
+        return await self._ohlc_ratio(
+            params.period, lambda opens, highs, lows, closes: np.abs(closes - opens)
         )
-        if cols is None:
-            return None
-
-        opens = cols["open"][-params.period :]
-        highs = cols["high"][-params.period :]
-        lows = cols["low"][-params.period :]
-        closes = cols["close"][-params.period :]
-
-        ranges = highs - lows
-        bodies = np.abs(closes - opens)
-        valid = ranges > 0
-        if not np.any(valid):
-            return None
-        return float(np.mean(bodies[valid] / ranges[valid]))
 
     def __repr__(self) -> str:
         return "CandleBodyRatio()"

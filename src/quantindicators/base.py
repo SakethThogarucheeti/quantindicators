@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
 
 import numpy as np
 from pydantic import BaseModel, ConfigDict
@@ -114,6 +114,39 @@ class Indicator(ABC):
         if len(rows) < min_len:
             return None
         return {c: np.array([r[c] for r in rows], dtype=float) for c in cols}
+
+    async def _ohlc_ratio(
+        self,
+        period: int,
+        numerator: Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], np.ndarray],
+        *,
+        lookback: int = 2,
+    ) -> float | None:
+        """
+        Shared candle body/shadow-ratio computation.
+
+        Fetches the last ``period`` bars' OHLC, then returns the mean of
+        ``numerator(opens, highs, lows, closes) / (highs - lows)`` over bars
+        with a nonzero high-low range (None if every bar in the window is a
+        doji). ``numerator`` must return an array shaped like its inputs.
+        """
+        cols = await self._fetch_columns(
+            period * lookback, "open", "high", "low", "close", min_len=period
+        )
+        if cols is None:
+            return None
+
+        opens = cols["open"][-period:]
+        highs = cols["high"][-period:]
+        lows = cols["low"][-period:]
+        closes = cols["close"][-period:]
+
+        ranges = highs - lows
+        values = numerator(opens, highs, lows, closes)
+        valid = ranges > 0
+        if not np.any(valid):
+            return None
+        return float(np.mean(values[valid] / ranges[valid]))
 
     # ------------------------------------------------------------------
     # Registry helpers
