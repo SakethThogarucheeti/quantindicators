@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+
 import numpy as np
 from pydantic import Field
 
@@ -29,12 +30,11 @@ class VWAPBands(Indicator):
     alias = "vwap_bands"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch_since(self._symbol, self._interval, params.session_open_utc)
-        if len(rows) < 2:
+        cols = await self._fetch_columns_since(params.session_open_utc, "close", "volume")
+        if cols is None:
             return None
-
-        closes = np.array([r["close"] for r in rows], dtype=float)
-        volumes = np.array([r["volume"] for r in rows], dtype=float)
+        closes = cols["close"]
+        volumes = cols["volume"]
 
         total_vol = float(volumes.sum())
         if total_vol == 0.0:

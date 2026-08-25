@@ -6,9 +6,12 @@ import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 from pydantic import BaseModel, ConfigDict
 
 if TYPE_CHECKING:
+    from datetime import datetime
+
     from quantindicators.store import AbstractCandleStore
 
 _log = logging.getLogger(__name__)
@@ -82,6 +85,35 @@ class Indicator(ABC):
         override keep its own precisely-checked parameter type instead of
         every subclass needing a ``# type: ignore[override]``.
         """
+
+    # ------------------------------------------------------------------
+    # Shared fetch-and-extract helpers for compute() implementations
+    # ------------------------------------------------------------------
+
+    async def _fetch_columns(
+        self, fetch_n: int, *cols: str, min_len: int | None = None
+    ) -> dict[str, np.ndarray] | None:
+        """
+        Fetch the last ``fetch_n`` candles and extract ``cols`` as numpy arrays.
+
+        Returns None (warmup not done) when fewer than ``min_len`` rows come
+        back — ``min_len`` defaults to ``fetch_n`` but can be set lower for
+        indicators whose guard threshold differs from how many bars they
+        request (e.g. fetching extra lookback bars for a rolling computation).
+        """
+        rows = await self._store.fetch(self._symbol, self._interval, fetch_n)
+        if len(rows) < (min_len if min_len is not None else fetch_n):
+            return None
+        return {c: np.array([r[c] for r in rows], dtype=float) for c in cols}
+
+    async def _fetch_columns_since(
+        self, since: datetime, *cols: str, min_len: int = 2
+    ) -> dict[str, np.ndarray] | None:
+        """Session-anchored counterpart of ``_fetch_columns``, via ``fetch_since``."""
+        rows = await self._store.fetch_since(self._symbol, self._interval, since)
+        if len(rows) < min_len:
+            return None
+        return {c: np.array([r[c] for r in rows], dtype=float) for c in cols}
 
     # ------------------------------------------------------------------
     # Registry helpers

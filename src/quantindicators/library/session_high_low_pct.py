@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+
 import numpy as np
 
 from quantindicators.base import Indicator, IndicatorParameters
@@ -25,21 +26,20 @@ class SessionHighLowPct(Indicator):
     alias = "session_hl_pct"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch_since(self._symbol, self._interval, params.session_open_utc)
-        if len(rows) < 2:
+        cols = await self._fetch_columns_since(
+            params.session_open_utc, "high", "low", "close"
+        )
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-
-        session_high = float(np.max(highs))
-        session_low = float(np.min(lows))
+        session_high = float(np.max(cols["high"]))
+        session_low = float(np.min(cols["low"]))
         rng = session_high - session_low
 
         if rng == 0.0:
             return None
 
-        current_close = float(rows[-1]["close"])
+        current_close = float(cols["close"][-1])
         return (current_close - session_low) / rng
 
     def __repr__(self) -> str:

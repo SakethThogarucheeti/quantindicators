@@ -29,12 +29,11 @@ class PVT(Indicator):
 
     async def compute(self, params: Parameters) -> float | None:
         # Need period+1 bars to compute period pct-changes, then z-score
-        rows = await self._store.fetch(self._symbol, self._interval, params.period + 1)
-        if len(rows) < params.period + 1:
+        cols = await self._fetch_columns(params.period + 1, "close", "volume")
+        if cols is None:
             return None
-
-        closes = np.array([r["close"] for r in rows], dtype=float)
-        volumes = np.array([r["volume"] for r in rows], dtype=float)
+        closes = cols["close"]
+        volumes = cols["volume"]
 
         pct_changes = np.diff(closes) / closes[:-1]  # length == period
         pct_changes = np.where(np.isfinite(pct_changes), pct_changes, 0.0)
