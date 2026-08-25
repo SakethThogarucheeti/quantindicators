@@ -5,12 +5,7 @@ from __future__ import annotations
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
-from quantindicators.library.wilder_ema import wilder_ema
-
-# Fetch 3Ã— the period so the EWM seed bias has decayed to negligible levels
-# before the value we return. This matches the warmup approach used by the
-# existing TechnicalFeatureEngine.
-_LOOKBACK_FACTOR = 3
+from quantindicators.library.wilder_ema import wilder_ema_of_close
 
 
 class EMA(Indicator):
@@ -29,13 +24,7 @@ class EMA(Indicator):
     alias = "ema"
 
     async def compute(self, params: Parameters) -> float | None:
-        cols = await self._fetch_columns(
-            params.period * _LOOKBACK_FACTOR, "close", min_len=params.period
-        )
-        if cols is None:
-            return None
-        closes = cols["close"]
-        return wilder_ema(closes, params.period)
+        return await wilder_ema_of_close(self, params.period)
 
     def __repr__(self) -> str:
         return "EMA()"

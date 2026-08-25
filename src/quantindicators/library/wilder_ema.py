@@ -32,6 +32,22 @@ def wilder_ema(values: np.ndarray, period: int) -> float:
     return float(out[-1])
 
 
+async def wilder_ema_of_close(
+    indicator: Indicator, period: int, lookback_factor: int = _LOOKBACK_FACTOR
+) -> float | None:
+    """
+    Shared fetch-and-smooth path for indicators whose value is simply
+    ``wilder_ema(closes, period)`` (currently: EMA and WilderEMA itself,
+    which are the same formula under two aliases).
+    """
+    cols = await indicator._fetch_columns(
+        period * lookback_factor, "close", min_len=period
+    )
+    if cols is None:
+        return None
+    return wilder_ema(cols["close"], period)
+
+
 class WilderEMA(Indicator):
     """
     Wilder's EMA (alpha = 1/period) applied to the close price.
@@ -49,13 +65,7 @@ class WilderEMA(Indicator):
     alias = "wilder_ema"
 
     async def compute(self, params: Parameters) -> float | None:
-        cols = await self._fetch_columns(
-            params.period * _LOOKBACK_FACTOR, "close", min_len=params.period
-        )
-        if cols is None:
-            return None
-        closes = cols["close"]
-        return wilder_ema(closes, params.period)
+        return await wilder_ema_of_close(self, params.period)
 
     def __repr__(self) -> str:
         return "WilderEMA()"
