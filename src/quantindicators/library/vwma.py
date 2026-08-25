@@ -5,6 +5,7 @@ from __future__ import annotations
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
+from quantindicators.library.vwap import volume_weighted_average
 
 
 class VWMA(Indicator):
@@ -26,13 +27,7 @@ class VWMA(Indicator):
         cols = await self._fetch_columns(params.period, "close", "volume")
         if cols is None:
             return None
-        closes = cols["close"]
-        volumes = cols["volume"]
-
-        total_vol = volumes.sum()
-        if total_vol == 0.0:
-            return None
-        return float((closes * volumes).sum() / total_vol)
+        return volume_weighted_average(cols["close"], cols["volume"])
 
     def __repr__(self) -> str:
         return "VWMA()"
