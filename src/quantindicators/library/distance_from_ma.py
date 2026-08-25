@@ -1,4 +1,4 @@
-﻿"""Distance from Moving Average â€” normalised rubber-band stretch."""
+"""Distance from Moving Average â€” normalised rubber-band stretch."""
 
 from __future__ import annotations
 

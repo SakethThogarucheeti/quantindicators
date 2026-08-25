@@ -1,4 +1,4 @@
-﻿"""Mean Reversion Score â€” composite of z-score, RSI, and Bollinger %B."""
+"""Mean Reversion Score â€” composite of z-score, RSI, and Bollinger %B."""
 
 from __future__ import annotations
 

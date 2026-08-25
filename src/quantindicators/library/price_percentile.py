@@ -1,4 +1,4 @@
-﻿"""Price Percentile â€” where current close sits within its N-bar distribution."""
+"""Price Percentile â€” where current close sits within its N-bar distribution."""
 
 from __future__ import annotations
 

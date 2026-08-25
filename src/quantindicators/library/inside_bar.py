@@ -1,4 +1,4 @@
-﻿"""Inside Bar â€” coiling / compression before a swing move."""
+"""Inside Bar â€” coiling / compression before a swing move."""
 
 from __future__ import annotations
 

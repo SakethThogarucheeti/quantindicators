@@ -1,4 +1,4 @@
-﻿"""True Strength Index â€” double-smoothed momentum oscillator."""
+"""True Strength Index â€” double-smoothed momentum oscillator."""
 
 from __future__ import annotations
 

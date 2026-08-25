@@ -1,4 +1,4 @@
-﻿"""Squeeze Momentum â€” Bollinger/Keltner compression + momentum signal."""
+"""Squeeze Momentum â€” Bollinger/Keltner compression + momentum signal."""
 
 from __future__ import annotations
 

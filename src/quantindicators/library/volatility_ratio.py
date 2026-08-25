@@ -1,4 +1,4 @@
-﻿"""Volatility Ratio â€” current ATR relative to its smoothed baseline."""
+"""Volatility Ratio â€” current ATR relative to its smoothed baseline."""
 
 from __future__ import annotations
 

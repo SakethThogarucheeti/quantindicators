@@ -1,4 +1,4 @@
-﻿"""Relative Volume â€” current volume relative to its rolling average."""
+"""Relative Volume â€” current volume relative to its rolling average."""
 
 from __future__ import annotations
 

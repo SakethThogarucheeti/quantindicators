@@ -1,4 +1,4 @@
-﻿"""Fisher Transform â€” non-linear normalization of price position."""
+"""Fisher Transform â€” non-linear normalization of price position."""
 
 from __future__ import annotations
 

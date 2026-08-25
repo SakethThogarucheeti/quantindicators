@@ -1,4 +1,4 @@
-﻿"""Ultimate Oscillator â€” multi-timeframe buying pressure."""
+"""Ultimate Oscillator â€” multi-timeframe buying pressure."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-﻿"""Weekly RSI Proxy â€” RSI computed on 5-bar rolled closes (daily â†’ weekly)."""
+"""Weekly RSI Proxy â€” RSI computed on 5-bar rolled closes (daily â†’ weekly)."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-﻿"""Normalized ATR â€” ATR as a percentage of close price."""
+"""Normalized ATR â€” ATR as a percentage of close price."""
 
 from __future__ import annotations
 

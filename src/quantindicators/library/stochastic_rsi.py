@@ -1,4 +1,4 @@
-﻿"""Stochastic RSI â€” RSI normalised within its own N-bar range."""
+"""Stochastic RSI â€” RSI normalised within its own N-bar range."""
 
 from __future__ import annotations
 

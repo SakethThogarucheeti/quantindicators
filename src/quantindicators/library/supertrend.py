@@ -1,4 +1,4 @@
-﻿"""Supertrend â€” trend-following indicator based on ATR bands."""
+"""Supertrend â€” trend-following indicator based on ATR bands."""
 
 from __future__ import annotations
 

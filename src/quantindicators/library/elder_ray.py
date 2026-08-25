@@ -1,4 +1,4 @@
-﻿"""Elder Ray â€” Bull/Bear Power relative to EMA."""
+"""Elder Ray â€” Bull/Bear Power relative to EMA."""
 
 from __future__ import annotations
 

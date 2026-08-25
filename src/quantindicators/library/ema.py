@@ -1,4 +1,4 @@
-﻿"""Exponential Moving Average (Wilder smoothing)."""
+"""Exponential Moving Average (Wilder smoothing)."""
 
 from __future__ import annotations
 

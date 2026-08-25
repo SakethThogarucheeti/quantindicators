@@ -1,4 +1,4 @@
-﻿"""Candle Body Ratio â€” body size relative to total range."""
+"""Candle Body Ratio â€” body size relative to total range."""
 
 from __future__ import annotations
 

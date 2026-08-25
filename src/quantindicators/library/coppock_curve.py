@@ -1,4 +1,4 @@
-﻿"""Coppock Curve â€” long-term momentum oscillator for swing/position bottoms."""
+"""Coppock Curve â€” long-term momentum oscillator for swing/position bottoms."""
 
 from __future__ import annotations
 

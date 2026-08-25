@@ -1,4 +1,4 @@
-﻿"""Bollinger Bands â€” SMA Â± k standard deviations."""
+"""Bollinger Bands â€” SMA Â± k standard deviations."""
 
 from __future__ import annotations
 

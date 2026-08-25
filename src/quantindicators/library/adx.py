@@ -1,4 +1,4 @@
-﻿"""ADX â€” Average Directional Index with +DI and -DI."""
+"""ADX â€” Average Directional Index with +DI and -DI."""
 
 from __future__ import annotations
 

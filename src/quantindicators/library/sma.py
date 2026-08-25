@@ -1,4 +1,4 @@
-﻿"""Simple Moving Average."""
+"""Simple Moving Average."""
 
 from __future__ import annotations
 

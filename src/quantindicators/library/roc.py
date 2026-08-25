@@ -1,4 +1,4 @@
-﻿"""Rate of Change (price momentum)."""
+"""Rate of Change (price momentum)."""
 
 from __future__ import annotations
 

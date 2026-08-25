@@ -1,4 +1,4 @@
-﻿"""Chandelier Exit â€” ATR-based measure of how extended price is from recent high."""
+"""Chandelier Exit â€” ATR-based measure of how extended price is from recent high."""
 
 from __future__ import annotations
 

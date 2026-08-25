@@ -1,4 +1,4 @@
-﻿"""Volume Rate of Change â€” percentage change in volume over N bars."""
+"""Volume Rate of Change â€” percentage change in volume over N bars."""
 
 from __future__ import annotations
 

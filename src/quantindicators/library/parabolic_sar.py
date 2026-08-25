@@ -1,4 +1,4 @@
-﻿"""Parabolic SAR."""
+"""Parabolic SAR."""
 
 from __future__ import annotations
 
