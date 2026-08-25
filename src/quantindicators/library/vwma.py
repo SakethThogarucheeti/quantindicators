@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
@@ -24,12 +23,11 @@ class VWMA(Indicator):
     alias = "vwma"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period, "close", "volume")
+        if cols is None:
             return None
-
-        closes = np.array([r["close"] for r in rows], dtype=float)
-        volumes = np.array([r["volume"] for r in rows], dtype=float)
+        closes = cols["close"]
+        volumes = cols["volume"]
 
         total_vol = volumes.sum()
         if total_vol == 0.0:

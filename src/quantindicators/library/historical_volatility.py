@@ -27,11 +27,10 @@ class HistoricalVolatility(Indicator):
     alias = "hv"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period + 1)
-        if len(rows) < params.period + 1:
+        cols = await self._fetch_columns(params.period + 1, "close")
+        if cols is None:
             return None
-
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         if np.any(closes <= 0):
             return None
 

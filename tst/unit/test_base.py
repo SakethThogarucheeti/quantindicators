@@ -118,6 +118,74 @@ def test_registered_returns_dict_with_known_aliases() -> None:
     assert "rsi" in reg
 
 
+class _FetchColumnsProbe(Indicator):
+    """Minimal concrete Indicator for exercising _fetch_columns directly."""
+
+    async def compute(self, params: object) -> float | None:  # pragma: no cover — unused
+        return None
+
+
+def _mock_store(rows: list[dict]) -> object:
+    from unittest.mock import AsyncMock, MagicMock
+
+    from quantindicators.store import AbstractCandleStore
+
+    store = MagicMock(spec=AbstractCandleStore)
+    store.fetch = AsyncMock(return_value=rows)
+    store.fetch_since = AsyncMock(return_value=rows)
+    return store
+
+
+@pytest.mark.asyncio
+async def test_fetch_columns_returns_requested_columns_as_arrays() -> None:
+    rows = [{"close": 10.0, "volume": 100}, {"close": 11.0, "volume": 200}]
+    probe = _FetchColumnsProbe(_mock_store(rows), "TEST", "15min")
+    result = await probe._fetch_columns(2, "close", "volume")
+    assert result is not None
+    assert list(result["close"]) == [10.0, 11.0]
+    assert list(result["volume"]) == [100.0, 200.0]
+
+
+@pytest.mark.asyncio
+async def test_fetch_columns_returns_none_when_fewer_rows_than_fetch_n() -> None:
+    rows = [{"close": 10.0}]
+    probe = _FetchColumnsProbe(_mock_store(rows), "TEST", "15min")
+    result = await probe._fetch_columns(5, "close")
+    assert result is None
+
+
+@pytest.mark.asyncio
+async def test_fetch_columns_uses_explicit_min_len_when_lower_than_fetch_n() -> None:
+    # 3 rows come back, fetch_n asked for 5, but min_len=2 means it's enough.
+    rows = [{"close": 1.0}, {"close": 2.0}, {"close": 3.0}]
+    probe = _FetchColumnsProbe(_mock_store(rows), "TEST", "15min")
+    result = await probe._fetch_columns(5, "close", min_len=2)
+    assert result is not None
+    assert list(result["close"]) == [1.0, 2.0, 3.0]
+
+
+@pytest.mark.asyncio
+async def test_fetch_columns_since_returns_none_below_default_min_len() -> None:
+    from datetime import UTC, datetime
+
+    rows = [{"close": 10.0}]
+    probe = _FetchColumnsProbe(_mock_store(rows), "TEST", "15min")
+    result = await probe._fetch_columns_since(datetime.now(UTC), "close")
+    assert result is None
+
+
+@pytest.mark.asyncio
+async def test_fetch_columns_since_returns_columns_when_enough_rows() -> None:
+    from datetime import UTC, datetime
+
+    rows = [{"close": 10.0, "high": 12.0}, {"close": 11.0, "high": 13.0}]
+    probe = _FetchColumnsProbe(_mock_store(rows), "TEST", "15min")
+    result = await probe._fetch_columns_since(datetime.now(UTC), "close", "high")
+    assert result is not None
+    assert list(result["close"]) == [10.0, 11.0]
+    assert list(result["high"]) == [12.0, 13.0]
+
+
 @pytest.mark.parametrize(
     "module_path,class_name",
     [

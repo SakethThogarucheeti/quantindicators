@@ -51,12 +51,11 @@ class MeanReversionScore(Indicator):
     alias = "mean_reversion_score"
 
     async def compute(self, params: Parameters) -> float | None:
-        needed = max(params.period, params.rsi_period + 1) * _LOOKBACK
-        rows = await self._store.fetch(self._symbol, self._interval, needed)
-        if len(rows) < max(params.period, params.rsi_period + 1):
+        min_len = max(params.period, params.rsi_period + 1)
+        cols = await self._fetch_columns(min_len * _LOOKBACK, "close", min_len=min_len)
+        if cols is None:
             return None
-
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
 
         # Z-score component
         window = closes[-params.period :]
