@@ -30,15 +30,15 @@ class UltimateOscillator(Indicator):
     async def compute(self, params: Parameters) -> float | None:
         if not (params.period1 < params.period2 < params.period3):
             return None
-        rows = await self._store.fetch(self._symbol, self._interval, params.period3 + 1)
-        if len(rows) < params.period3 + 1:
+        cols = await self._fetch_columns(params.period3 + 1, "high", "low", "close")
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
-        tr = true_range(highs, lows, closes)  # length == len(rows)
+        tr = true_range(highs, lows, closes)  # length == len(highs)
 
         # Buying pressure: close - min(low, prev_close), bars 1..n
         prev_closes = closes[:-1]

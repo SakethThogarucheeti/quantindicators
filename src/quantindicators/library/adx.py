@@ -33,15 +33,15 @@ class ADX(Indicator):
         return result[0] if result is not None else None
 
     async def compute_full(self, params: Parameters) -> tuple[float, float, float] | None:
-        rows = await self._store.fetch(
-            self._symbol, self._interval, params.period * _LOOKBACK_FACTOR
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK_FACTOR, "high", "low", "close", min_len=params.period * 2
         )
-        if len(rows) < params.period * 2:
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         tr = true_range(highs, lows, closes)
 

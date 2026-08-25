@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
@@ -32,14 +31,14 @@ class InsideBar(Indicator):
     alias = "inside_bar"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(
-            self._symbol, self._interval, (params.period + 1) * _LOOKBACK
+        cols = await self._fetch_columns(
+            (params.period + 1) * _LOOKBACK, "high", "low", min_len=params.period + 1
         )
-        if len(rows) < params.period + 1:
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows[-(params.period + 1) :]], dtype=float)
-        lows = np.array([r["low"] for r in rows[-(params.period + 1) :]], dtype=float)
+        highs = cols["high"][-(params.period + 1) :]
+        lows = cols["low"][-(params.period + 1) :]
 
         count = 0
         for i in range(1, params.period + 1):

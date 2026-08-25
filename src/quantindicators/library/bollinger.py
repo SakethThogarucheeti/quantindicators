@@ -32,11 +32,11 @@ class BollingerBands(Indicator):
     async def compute_full(
         self, params: Parameters
     ) -> tuple[float, float, float, float, float] | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period, "close")
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         middle = float(np.mean(closes))
         std = float(np.std(closes, ddof=1))
         upper = middle + params.k * std

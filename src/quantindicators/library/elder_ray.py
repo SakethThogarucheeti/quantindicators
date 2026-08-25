@@ -40,13 +40,15 @@ class ElderRay(Indicator):
     alias = "elder_ray"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period * _LOOKBACK)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK, "high", "low", "close", min_len=params.period
+        )
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         ema = _ema(closes, params.period)
         bull_power = highs[-1] - ema

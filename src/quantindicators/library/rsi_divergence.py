@@ -36,11 +36,13 @@ class RSIDivergence(Indicator):
 
     async def compute(self, params: Parameters) -> float | None:
         needed = (params.rsi_period + params.divergence_window) * _LOOKBACK
-        rows = await self._store.fetch(self._symbol, self._interval, needed)
-        if len(rows) < params.rsi_period + params.divergence_window + 1:
+        cols = await self._fetch_columns(
+            needed, "close", min_len=params.rsi_period + params.divergence_window + 1
+        )
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         rsi = _rsi_series(closes, params.rsi_period)
 
         # Need at least divergence_window valid RSI values

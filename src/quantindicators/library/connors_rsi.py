@@ -34,12 +34,12 @@ class ConnorsRSI(Indicator):
 
     async def compute(self, params: Parameters) -> float | None:
         limit = params.rank_period + params.rsi_period * _LOOKBACK + 1
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
         min_bars = max(params.rsi_period + 1, params.streak_period + 1, params.rank_period + 1)
-        if len(rows) < min_bars:
+        cols = await self._fetch_columns(limit, "close", min_len=min_bars)
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         deltas = np.diff(closes)
 
         # Component 1: price RSI

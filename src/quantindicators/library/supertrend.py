@@ -37,16 +37,18 @@ class Supertrend(Indicator):
 
     async def compute_full(self, params: Parameters) -> tuple[float, float] | None:
         limit = params.period * _LOOKBACK_FACTOR
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
-        if len(rows) < params.period + 1:
+        cols = await self._fetch_columns(
+            limit, "high", "low", "close", min_len=params.period + 1
+        )
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         tr = true_range(highs, lows, closes)
-        n = len(rows)
+        n = len(highs)
 
         # Compute ATR for each bar via rolling Wilder EMA
         atrs = np.zeros(n)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from quantindicators.base import Indicator, IndicatorParameters
 
+
 class PivotPoints(Indicator):
     """
     Classic Pivot Points (floor-trader method) from yesterday's session.

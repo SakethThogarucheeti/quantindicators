@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
@@ -30,12 +29,12 @@ class EMA(Indicator):
     alias = "ema"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(
-            self._symbol, self._interval, params.period * _LOOKBACK_FACTOR
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK_FACTOR, "close", min_len=params.period
         )
-        if len(rows) < params.period:
+        if cols is None:
             return None
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         return wilder_ema(closes, params.period)
 
     def __repr__(self) -> str:

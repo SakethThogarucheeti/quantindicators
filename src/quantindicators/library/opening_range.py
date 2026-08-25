@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters

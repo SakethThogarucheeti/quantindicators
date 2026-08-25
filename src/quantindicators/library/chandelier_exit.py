@@ -34,13 +34,15 @@ class ChandelierExit(Indicator):
     alias = "chandelier_exit"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period * _LOOKBACK)
-        if len(rows) < params.period + 1:
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK, "high", "low", "close", min_len=params.period + 1
+        )
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         tr = true_range(highs, lows, closes)
         atr = wilder_ema(tr[-params.period :], params.period)

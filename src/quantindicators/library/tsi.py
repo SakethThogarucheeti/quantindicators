@@ -33,11 +33,11 @@ class TSI(Indicator):
         if params.slow <= params.fast:
             return None
         limit = (params.fast + params.slow) * _LOOKBACK
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
-        if len(rows) < params.fast + params.slow + 1:
+        cols = await self._fetch_columns(limit, "close", min_len=params.fast + params.slow + 1)
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         pc = np.diff(closes)  # 1-bar price change
         apc = np.abs(pc)  # absolute price change
 

@@ -32,11 +32,11 @@ class PricePercentile(Indicator):
     alias = "price_percentile"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period * _LOOKBACK)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period * _LOOKBACK, "close", min_len=params.period)
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows[-params.period :]], dtype=float)
+        closes = cols["close"][-params.period :]
         current = closes[-1]
         pct = float(np.sum(closes[:-1] < current) / (params.period - 1) * 100.0)
         return pct

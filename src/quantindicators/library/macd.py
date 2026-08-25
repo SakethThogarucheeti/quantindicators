@@ -44,11 +44,11 @@ class MACD(Indicator):
         if params.fast >= params.slow:
             return None
         limit = params.slow * 3 + params.signal
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
-        if len(rows) < params.slow + params.signal:
+        cols = await self._fetch_columns(limit, "close", min_len=params.slow + params.signal)
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
 
         # Build MACD line over a rolling window so we have enough points
         # to smooth into a signal line.

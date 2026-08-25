@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-import numpy as np
 
 from quantindicators.base import Indicator, IndicatorParameters
 
@@ -24,12 +23,14 @@ class VWAP(Indicator):
     alias = "vwap"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch_since(self._symbol, self._interval, params.session_open_utc)
-        if not rows:
+        cols = await self._fetch_columns_since(
+            params.session_open_utc, "close", "volume", min_len=1
+        )
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
-        volumes = np.array([r["volume"] for r in rows], dtype=float)
+        closes = cols["close"]
+        volumes = cols["volume"]
 
         total_vol = volumes.sum()
         if total_vol == 0.0:

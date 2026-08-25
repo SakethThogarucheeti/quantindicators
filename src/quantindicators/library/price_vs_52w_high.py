@@ -30,12 +30,14 @@ class PriceVs52wHigh(Indicator):
     alias = "price_vs_52w_high"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period * _LOOKBACK)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK, "high", "close", min_len=params.period
+        )
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows[-params.period :]], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"][-params.period :]
+        closes = cols["close"]
 
         peak = float(np.max(highs))
         if peak == 0:

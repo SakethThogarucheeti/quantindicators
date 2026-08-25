@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
@@ -41,13 +40,15 @@ class KeltnerChannels(Indicator):
 
     async def compute_full(self, params: Parameters) -> tuple[float, float, float] | None:
         period = max(params.ema_period, params.atr_period)
-        rows = await self._store.fetch(self._symbol, self._interval, period * _LOOKBACK_FACTOR)
-        if len(rows) < period:
+        cols = await self._fetch_columns(
+            period * _LOOKBACK_FACTOR, "close", "high", "low", min_len=period
+        )
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
+        closes = cols["close"]
+        highs = cols["high"]
+        lows = cols["low"]
 
         # Standard EMA (alpha = 2/(n+1))
         alpha = 2.0 / (params.ema_period + 1)

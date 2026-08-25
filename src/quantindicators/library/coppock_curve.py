@@ -38,12 +38,12 @@ class CoppockCurve(Indicator):
 
     async def compute(self, params: Parameters) -> float | None:
         needed = (params.wma_period + max(params.roc1_period, params.roc2_period)) * _LOOKBACK
-        rows = await self._store.fetch(self._symbol, self._interval, needed)
         total_needed = params.wma_period + max(params.roc1_period, params.roc2_period)
-        if len(rows) < total_needed:
+        cols = await self._fetch_columns(needed, "close", min_len=total_needed)
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
 
         # Build wma_period ROC-sum values
         roc_sums: list[float] = []

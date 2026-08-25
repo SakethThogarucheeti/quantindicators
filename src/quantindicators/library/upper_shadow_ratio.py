@@ -31,14 +31,16 @@ class UpperShadowRatio(Indicator):
     alias = "upper_shadow_ratio"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period * _LOOKBACK)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK, "open", "high", "low", "close", min_len=params.period
+        )
+        if cols is None:
             return None
 
-        opens = np.array([r["open"] for r in rows[-params.period :]], dtype=float)
-        highs = np.array([r["high"] for r in rows[-params.period :]], dtype=float)
-        lows = np.array([r["low"] for r in rows[-params.period :]], dtype=float)
-        closes = np.array([r["close"] for r in rows[-params.period :]], dtype=float)
+        opens = cols["open"][-params.period :]
+        highs = cols["high"][-params.period :]
+        lows = cols["low"][-params.period :]
+        closes = cols["close"][-params.period :]
 
         ranges = highs - lows
         upper_shadows = highs - np.maximum(opens, closes)
