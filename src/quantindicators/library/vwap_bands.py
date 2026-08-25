@@ -8,6 +8,7 @@ import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
+from quantindicators.library.vwap import volume_weighted_average
 
 
 class VWAPBands(Indicator):
@@ -36,11 +37,10 @@ class VWAPBands(Indicator):
         closes = cols["close"]
         volumes = cols["volume"]
 
-        total_vol = float(volumes.sum())
-        if total_vol == 0.0:
+        vwap = volume_weighted_average(closes, volumes)
+        if vwap is None:
             return None
 
-        vwap = float((closes * volumes).sum() / total_vol)
         deviations = closes - vwap
         std = float(np.std(deviations, ddof=1))
 

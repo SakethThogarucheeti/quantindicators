@@ -4,7 +4,21 @@ from __future__ import annotations
 
 from datetime import datetime
 
+import numpy as np
+
 from quantindicators.base import Indicator, IndicatorParameters
+
+
+def volume_weighted_average(closes: np.ndarray, volumes: np.ndarray) -> float | None:
+    """
+    Volume-weighted average of ``closes``, weighted by ``volumes``.
+
+    Returns None when total volume is zero.
+    """
+    total_vol = volumes.sum()
+    if total_vol == 0.0:
+        return None
+    return float((closes * volumes).sum() / total_vol)
 
 
 class VWAP(Indicator):
@@ -28,15 +42,7 @@ class VWAP(Indicator):
         )
         if cols is None:
             return None
-
-        closes = cols["close"]
-        volumes = cols["volume"]
-
-        total_vol = volumes.sum()
-        if total_vol == 0.0:
-            return None
-
-        return float((closes * volumes).sum() / total_vol)
+        return volume_weighted_average(cols["close"], cols["volume"])
 
     def __repr__(self) -> str:
         return "VWAP()"
