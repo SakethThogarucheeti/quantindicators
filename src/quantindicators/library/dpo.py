@@ -29,11 +29,11 @@ class DPO(Indicator):
     async def compute(self, params: Parameters) -> float | None:
         shift = params.period // 2 + 1
         limit = params.period + shift
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
-        if len(rows) < limit:
+        cols = await self._fetch_columns(limit, "close")
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
 
         # SMA of the window ending at bar (limit - shift - 1)
         sma_window = closes[: params.period]

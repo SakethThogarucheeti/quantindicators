@@ -25,11 +25,11 @@ class RVOL(Indicator):
     alias = "rvol"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period + 1)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period + 1, "volume", min_len=params.period)
+        if cols is None:
             return None
 
-        volumes = np.array([r["volume"] for r in rows], dtype=float)
+        volumes = cols["volume"]
         avg_vol = float(np.mean(volumes[:-1]))  # average over prior period bars
         if avg_vol == 0.0:
             return None

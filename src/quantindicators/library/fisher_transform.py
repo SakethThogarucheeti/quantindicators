@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+
 import numpy as np
 from pydantic import Field
 
@@ -28,13 +29,13 @@ class FisherTransform(Indicator):
     alias = "fisher_transform"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period, "high", "low", "close")
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         hh = float(np.max(highs))
         ll = float(np.min(lows))

@@ -39,12 +39,12 @@ class TrueRange(Indicator):
     alias = "true_range"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, 2)
-        if len(rows) < 2:
+        cols = await self._fetch_columns(2, "high", "low", "close")
+        if cols is None:
             return None
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
         tr = true_range(highs, lows, closes)
         return float(tr[-1])
 

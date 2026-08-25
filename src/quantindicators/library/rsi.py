@@ -27,13 +27,13 @@ class RSI(Indicator):
     alias = "rsi"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(
-            self._symbol, self._interval, params.period * _LOOKBACK_FACTOR
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK_FACTOR, "close", min_len=params.period + 1
         )
-        if len(rows) < params.period + 1:
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         deltas = np.diff(closes)
         gains = np.where(deltas > 0, deltas, 0.0)
         losses = np.where(deltas < 0, -deltas, 0.0)

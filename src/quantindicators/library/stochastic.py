@@ -33,17 +33,17 @@ class Stochastic(Indicator):
     async def compute_full(self, params: Parameters) -> tuple[float, float] | None:
         # Need k_period + d_period - 1 bars to compute d_period %K values for %D
         limit = params.k_period + params.d_period - 1
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
-        if len(rows) < params.k_period:
+        cols = await self._fetch_columns(limit, "high", "low", "close", min_len=params.k_period)
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         # Compute %K for each bar in the trailing window (for %D smoothing)
         k_values: list[float] = []
-        for i in range(params.k_period - 1, len(rows)):
+        for i in range(params.k_period - 1, len(highs)):
             window_h = highs[i - params.k_period + 1 : i + 1]
             window_l = lows[i - params.k_period + 1 : i + 1]
             hh = float(np.max(window_h))

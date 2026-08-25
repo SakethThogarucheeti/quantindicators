@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
@@ -32,15 +31,17 @@ class VolatilityRatio(Indicator):
 
     async def compute(self, params: Parameters) -> float | None:
         limit = (params.atr_period + params.smooth_period) * _LOOKBACK
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
-        if len(rows) < params.atr_period + params.smooth_period:
+        cols = await self._fetch_columns(
+            limit, "high", "low", "close", min_len=params.atr_period + params.smooth_period
+        )
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
-        tr = true_range(highs, lows, closes)  # length == len(rows)
+        tr = true_range(highs, lows, closes)  # length == len(highs)
 
         # Build a rolling ATR array using Wilder EMA across the series
         atr_series = _ema_array(tr, params.atr_period)

@@ -26,14 +26,14 @@ class CMF(Indicator):
     alias = "cmf"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period, "high", "low", "close", "volume")
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
-        volumes = np.array([r["volume"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
+        volumes = cols["volume"]
 
         hl_range = highs - lows
         # When H == L (no movement), MFM = 0

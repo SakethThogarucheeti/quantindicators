@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 from pydantic import Field
 
 from quantindicators.base import Indicator, IndicatorParameters
@@ -29,15 +28,15 @@ class ATR(Indicator):
     alias = "atr"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(
-            self._symbol, self._interval, params.period * _LOOKBACK_FACTOR
+        cols = await self._fetch_columns(
+            params.period * _LOOKBACK_FACTOR, "high", "low", "close", min_len=params.period
         )
-        if len(rows) < params.period:
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         tr = true_range(highs, lows, closes)
         atr = wilder_ema(tr, params.period)

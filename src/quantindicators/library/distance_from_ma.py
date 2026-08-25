@@ -30,11 +30,11 @@ class DistanceFromMA(Indicator):
     alias = "distance_from_ma"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period * _LOOKBACK)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period * _LOOKBACK, "close", min_len=params.period)
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         sma = float(np.mean(closes[-params.period :]))
         if sma == 0:
             return None

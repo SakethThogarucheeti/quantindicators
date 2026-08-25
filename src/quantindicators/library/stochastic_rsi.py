@@ -31,11 +31,13 @@ class StochasticRSI(Indicator):
 
     async def compute(self, params: Parameters) -> float | None:
         needed = (params.rsi_period + params.stoch_period) * _LOOKBACK
-        rows = await self._store.fetch(self._symbol, self._interval, needed)
-        if len(rows) < params.rsi_period + params.stoch_period + 1:
+        cols = await self._fetch_columns(
+            needed, "close", min_len=params.rsi_period + params.stoch_period + 1
+        )
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        closes = cols["close"]
         rsi = _rsi_series(closes, params.rsi_period)
         valid = rsi[~np.isnan(rsi)]
         if len(valid) < params.stoch_period:

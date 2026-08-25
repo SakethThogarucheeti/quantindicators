@@ -31,11 +31,11 @@ class LinearRegressionSlope(Indicator):
     alias = "linreg_slope"
 
     async def compute(self, params: Parameters) -> float | None:
-        rows = await self._store.fetch(self._symbol, self._interval, params.period * _LOOKBACK)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(params.period * _LOOKBACK, "close", min_len=params.period)
+        if cols is None:
             return None
 
-        closes = np.array([r["close"] for r in rows[-params.period :]], dtype=float)
+        closes = cols["close"][-params.period :]
         x = np.arange(params.period, dtype=float)
         x -= x.mean()
         slope = float(np.dot(x, closes) / np.dot(x, x))

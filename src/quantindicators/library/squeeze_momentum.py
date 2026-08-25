@@ -48,13 +48,13 @@ class SqueezeMomentum(Indicator):
 
     async def compute(self, params: Parameters) -> float | None:
         limit = params.period * _LOOKBACK
-        rows = await self._store.fetch(self._symbol, self._interval, limit)
-        if len(rows) < params.period:
+        cols = await self._fetch_columns(limit, "high", "low", "close", min_len=params.period)
+        if cols is None:
             return None
 
-        highs = np.array([r["high"] for r in rows], dtype=float)
-        lows = np.array([r["low"] for r in rows], dtype=float)
-        closes = np.array([r["close"] for r in rows], dtype=float)
+        highs = cols["high"]
+        lows = cols["low"]
+        closes = cols["close"]
 
         # Bollinger Bands over last period bars
         window_c = closes[-params.period :]
