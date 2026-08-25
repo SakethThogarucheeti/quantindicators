@@ -1,4 +1,4 @@
-﻿"""Linear Regression Slope â€” trend strength without lag."""
+"""Linear Regression Slope â€” trend strength without lag."""
 
 from __future__ import annotations
 

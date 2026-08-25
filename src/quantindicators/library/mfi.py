@@ -1,4 +1,4 @@
-﻿"""Money Flow Index â€” volume-weighted RSI."""
+"""Money Flow Index â€” volume-weighted RSI."""
 
 from __future__ import annotations
 

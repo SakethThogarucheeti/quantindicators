@@ -1,4 +1,4 @@
-﻿"""Average True Range (Wilder smoothing)."""
+"""Average True Range (Wilder smoothing)."""
 
 from __future__ import annotations
 

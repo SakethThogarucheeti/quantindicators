@@ -1,4 +1,4 @@
-﻿"""Commodity Channel Index."""
+"""Commodity Channel Index."""
 
 from __future__ import annotations
 

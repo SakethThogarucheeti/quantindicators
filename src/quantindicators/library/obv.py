@@ -1,4 +1,4 @@
-﻿"""On-Balance Volume."""
+"""On-Balance Volume."""
 
 from __future__ import annotations
 

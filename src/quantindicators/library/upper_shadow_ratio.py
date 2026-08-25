@@ -1,4 +1,4 @@
-﻿"""Upper Shadow Ratio â€” rejection of highs, bearish wick signal."""
+"""Upper Shadow Ratio â€” rejection of highs, bearish wick signal."""
 
 from __future__ import annotations
 

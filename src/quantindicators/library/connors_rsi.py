@@ -1,4 +1,4 @@
-﻿"""Connors RSI â€” composite mean-reversion oscillator."""
+"""Connors RSI â€” composite mean-reversion oscillator."""
 
 from __future__ import annotations
 

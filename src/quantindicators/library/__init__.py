@@ -1,1 +1,1 @@
-﻿# Indicator implementations — imported by quantindicators.__init__
+# Indicator implementations — imported by quantindicators.__init__

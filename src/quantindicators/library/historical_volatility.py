@@ -1,4 +1,4 @@
-﻿"""Historical Volatility â€” annualised close-to-close log-return std dev."""
+"""Historical Volatility â€” annualised close-to-close log-return std dev."""
 
 from __future__ import annotations
 

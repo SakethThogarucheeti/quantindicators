@@ -1,4 +1,4 @@
-﻿"""Price vs 52-week High â€” how far price has fallen from its peak."""
+"""Price vs 52-week High â€” how far price has fallen from its peak."""
 
 from __future__ import annotations
 

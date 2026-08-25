@@ -1,4 +1,4 @@
-﻿"""Donchian Channels â€” highest high / lowest low over N bars."""
+"""Donchian Channels â€” highest high / lowest low over N bars."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-﻿"""Keltner Channels â€” EMA Â± k * ATR."""
+"""Keltner Channels â€” EMA Â± k * ATR."""
 
 from __future__ import annotations
 

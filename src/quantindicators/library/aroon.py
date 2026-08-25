@@ -1,4 +1,4 @@
-﻿"""Aroon Oscillator â€” measures recency of highs vs lows."""
+"""Aroon Oscillator â€” measures recency of highs vs lows."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-﻿"""WilderEMA â€” Wilder's exponential moving average as a standalone indicator."""
+"""WilderEMA â€” Wilder's exponential moving average as a standalone indicator."""
 
 from __future__ import annotations
 

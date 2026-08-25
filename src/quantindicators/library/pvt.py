@@ -1,4 +1,4 @@
-﻿"""Price Volume Trend (z-scored) â€” cumulative volume-weighted price change."""
+"""Price Volume Trend (z-scored) â€” cumulative volume-weighted price change."""
 
 from __future__ import annotations
 

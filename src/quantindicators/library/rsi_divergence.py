@@ -1,4 +1,4 @@
-﻿"""RSI Divergence â€” bullish when price makes new low but RSI does not."""
+"""RSI Divergence â€” bullish when price makes new low but RSI does not."""
 
 from __future__ import annotations
 

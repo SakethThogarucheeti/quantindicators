@@ -1,4 +1,4 @@
-﻿"""Opening Range Position â€” close position within the first-hour range."""
+"""Opening Range Position â€” close position within the first-hour range."""
 
 from __future__ import annotations
 

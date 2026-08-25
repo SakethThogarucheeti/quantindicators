@@ -1,4 +1,4 @@
-﻿"""Chaikin Volatility â€” rate of change in the EMA of H-L spread."""
+"""Chaikin Volatility â€” rate of change in the EMA of H-L spread."""
 
 from __future__ import annotations
 

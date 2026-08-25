@@ -1,4 +1,4 @@
-﻿"""Pivot Points â€” classic floor-trader pivots from the previous session."""
+"""Pivot Points â€” classic floor-trader pivots from the previous session."""
 
 from __future__ import annotations
 

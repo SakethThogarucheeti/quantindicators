@@ -1,4 +1,4 @@
-﻿"""Relative Strength Index (Wilder smoothing)."""
+"""Relative Strength Index (Wilder smoothing)."""
 
 from __future__ import annotations
 

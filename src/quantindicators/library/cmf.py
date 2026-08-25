@@ -1,4 +1,4 @@
-﻿"""Chaikin Money Flow."""
+"""Chaikin Money Flow."""
 
 from __future__ import annotations
 

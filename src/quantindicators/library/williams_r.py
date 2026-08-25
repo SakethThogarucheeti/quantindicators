@@ -1,4 +1,4 @@
-﻿"""Williams %R."""
+"""Williams %R."""
 
 from __future__ import annotations
 

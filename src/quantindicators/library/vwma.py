@@ -1,4 +1,4 @@
-﻿"""Volume-Weighted Moving Average."""
+"""Volume-Weighted Moving Average."""
 
 from __future__ import annotations
 

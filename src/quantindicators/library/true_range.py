@@ -1,4 +1,4 @@
-﻿"""TrueRange â€” True Range as a standalone indicator (returns latest TR value)."""
+"""TrueRange â€” True Range as a standalone indicator (returns latest TR value)."""
 
 from __future__ import annotations
 

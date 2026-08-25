@@ -1,4 +1,4 @@
-﻿"""Gap Size â€” session open gap relative to previous close."""
+"""Gap Size â€” session open gap relative to previous close."""
 
 from __future__ import annotations
 

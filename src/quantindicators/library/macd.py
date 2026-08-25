@@ -1,4 +1,4 @@
-﻿"""MACD â€” Moving Average Convergence/Divergence."""
+"""MACD â€” Moving Average Convergence/Divergence."""
 
 from __future__ import annotations
 

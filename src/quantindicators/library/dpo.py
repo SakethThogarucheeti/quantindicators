@@ -1,4 +1,4 @@
-﻿"""Detrended Price Oscillator â€” removes dominant trend to expose cycles."""
+"""Detrended Price Oscillator â€” removes dominant trend to expose cycles."""
 
 from __future__ import annotations
 
