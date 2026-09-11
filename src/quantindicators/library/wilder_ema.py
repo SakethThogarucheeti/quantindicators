@@ -10,13 +10,19 @@ from quantindicators.base import Indicator, IndicatorParameters
 _LOOKBACK_FACTOR = 3
 
 
-def wilder_ema(values: np.ndarray, period: int) -> float:
+def wilder_ema(
+    values: np.ndarray, period: int, *, return_series: bool = False
+) -> float | np.ndarray:
     """
     Wilder's EMA (alpha = 1/period) over ``values``.
 
     Equivalent to Polars ewm_mean(alpha=1/period, adjust=False)[-1].
     Uses scipy.signal.lfilter for a single vectorised pass.
     Requires quantindicators[scipy] to be installed.
+
+    Returns the final smoothed value by default; pass ``return_series=True``
+    to get the full smoothed array instead (e.g. when a caller needs to
+    Wilder-smooth a second time over the output, as ADX does over DX).
     """
     try:
         from scipy.signal import lfilter  # type: ignore[import-untyped]
@@ -29,7 +35,7 @@ def wilder_ema(values: np.ndarray, period: int) -> float:
     a = [1.0, -(1.0 - alpha)]
     zi = np.array([values[0] * (1.0 - alpha)])
     out, _ = lfilter(b, a, values, zi=zi)
-    return float(out[-1])
+    return out if return_series else float(out[-1])
 
 
 async def wilder_ema_of_close(
