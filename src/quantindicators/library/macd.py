@@ -1,4 +1,4 @@
-"""MACD â€” Moving Average Convergence/Divergence."""
+"""MACD — Moving Average Convergence/Divergence."""
 
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ class MACD(Indicator):
     Histogram  = MACD - Signal
 
     Returns (macd, signal, histogram) or None when insufficient data.
-    Uses compute() â†’ float for the MACD line; use compute_full() for all three.
+    Uses compute() → float for the MACD line; use compute_full() for all three.
     """
 
     class Parameters(IndicatorParameters):

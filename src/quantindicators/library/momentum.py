@@ -1,4 +1,4 @@
-"""Momentum â€” absolute price change over N bars."""
+"""Momentum — absolute price change over N bars."""
 
 from __future__ import annotations
 

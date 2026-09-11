@@ -1,4 +1,4 @@
-"""Distance from Moving Average â€” normalised rubber-band stretch."""
+"""Distance from Moving Average — normalised rubber-band stretch."""
 
 from __future__ import annotations
 
@@ -16,10 +16,10 @@ class DistanceFromMA(Indicator):
 
     (close - SMA(period)) / SMA(period) * 100
 
-    Positive â†’ price stretched above MA (overbought).
-    Negative â†’ price stretched below MA (oversold â†’ reversal up).
+    Positive → price stretched above MA (overbought).
+    Negative → price stretched below MA (oversold → reversal up).
 
-    Signal extractor: negate (negative = oversold stretch â†’ buy).
+    Signal extractor: negate (negative = oversold stretch → buy).
 
     Returns None when insufficient bars or SMA is zero.
     """

@@ -1,4 +1,4 @@
-"""Chandelier Exit â€” ATR-based measure of how extended price is from recent high."""
+"""Chandelier Exit — ATR-based measure of how extended price is from recent high."""
 
 from __future__ import annotations
 
@@ -19,8 +19,8 @@ class ChandelierExit(Indicator):
     chandelier_long  = highest_high(period) - ATR(period) * multiplier
     distance         = (close - chandelier_long) / close * 100
 
-    Positive â†’ price well above the exit line (not stretched down).
-    Negative â†’ price has fallen below the chandelier (oversold, stretched).
+    Positive → price well above the exit line (not stretched down).
+    Negative → price has fallen below the chandelier (oversold, stretched).
 
     Signal extractor: negate (negative = price below chandelier = buy setup).
 

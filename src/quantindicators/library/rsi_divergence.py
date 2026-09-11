@@ -1,4 +1,4 @@
-"""RSI Divergence â€” bullish when price makes new low but RSI does not."""
+"""RSI Divergence — bullish when price makes new low but RSI does not."""
 
 from __future__ import annotations
 
@@ -22,8 +22,8 @@ class RSIDivergence(Indicator):
         rsi_chg    = (rsi_now  - rsi_N_ago)  / 100
         divergence = rsi_chg - price_chg
 
-    Positive value â†’ bullish divergence (RSI stronger than price â†’ mean reversion up).
-    Negative value â†’ bearish divergence.
+    Positive value → bullish divergence (RSI stronger than price → mean reversion up).
+    Negative value → bearish divergence.
 
     Returns None when insufficient bars.
     """
