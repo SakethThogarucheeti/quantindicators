@@ -1,4 +1,4 @@
-"""Opening Range Position â€” close position within the first-hour range."""
+"""Opening Range Position — close position within the first-hour range."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ class OpeningRangePosition(Indicator):
     Opening Range Position.
 
     Computes the high and low of the first *range_bars* bars of the
-    current session (e.g. 4 Ã— 15min = first hour), then returns:
+    current session (e.g. 4 × 15min = first hour), then returns:
 
         (close - OR_low) / (OR_high - OR_low)
 

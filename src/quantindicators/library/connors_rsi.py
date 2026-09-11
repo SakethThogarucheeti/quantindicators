@@ -1,4 +1,4 @@
-"""Connors RSI â€” composite mean-reversion oscillator."""
+"""Connors RSI — composite mean-reversion oscillator."""
 
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ class ConnorsRSI(Indicator):
             return None
         price_rsi = 100.0 - 100.0 / (1.0 + avg_gain / avg_loss)
 
-        # Component 2: streak RSI â€” streak length at each bar
+        # Component 2: streak RSI — streak length at each bar
         streaks = np.zeros(len(closes))
         for i in range(1, len(closes)):
             if closes[i] > closes[i - 1]:

@@ -1,4 +1,4 @@
-"""Linear Regression Slope â€” trend strength without lag."""
+"""Linear Regression Slope — trend strength without lag."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ class LinearRegressionSlope(Indicator):
 
         slope_pct = slope / mean(closes) * 100
 
-    Positive â†’ uptrend. Negative â†’ downtrend.
+    Positive → uptrend. Negative → downtrend.
     Signal extractor: as-is for trend, negate for mean reversion.
 
     Returns None when insufficient bars.

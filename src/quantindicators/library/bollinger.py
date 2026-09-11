@@ -1,4 +1,4 @@
-"""Bollinger Bands â€” SMA Â± k standard deviations."""
+"""Bollinger Bands — SMA ± k standard deviations."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from quantindicators.base import Indicator, IndicatorParameters
 
 class BollingerBands(Indicator):
     """
-    Bollinger Bands: middle = SMA(period), upper/lower = middle Â± k*stdev.
+    Bollinger Bands: middle = SMA(period), upper/lower = middle ± k*stdev.
 
     compute() returns the %B value: where the current close sits within the
     bands (0 = lower band, 1 = upper band, >1 above, <0 below).

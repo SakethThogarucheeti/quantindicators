@@ -1,4 +1,4 @@
-"""Mean Reversion Score â€” composite of z-score, RSI, and Bollinger %B."""
+"""Mean Reversion Score — composite of z-score, RSI, and Bollinger %B."""
 
 from __future__ import annotations
 
@@ -28,16 +28,16 @@ def _rsi_scalar(closes: np.ndarray, period: int) -> float | None:
 
 class MeanReversionScore(Indicator):
     """
-    Mean Reversion Score â€” composite oscillator.
+    Mean Reversion Score — composite oscillator.
 
     Combines three mean-reversion signals into one normalised score:
-      z_score  = (close - SMA) / std   â†’ rescaled to [0, 100]
-      rsi      = RSI(14)               â†’ already [0, 100]
-      pct_b    = Bollinger %B          â†’ rescaled to [0, 100]
+      z_score  = (close - SMA) / std   → rescaled to [0, 100]
+      rsi      = RSI(14)               → already [0, 100]
+      pct_b    = Bollinger %B          → rescaled to [0, 100]
 
     score = (z_component + rsi_component + pct_b_component) / 3
 
-    High score â†’ overbought. Low score â†’ oversold (reversal setup).
+    High score → overbought. Low score → oversold (reversal setup).
     Signal extractor: negate (low score = buy signal).
 
     Returns None when insufficient bars.

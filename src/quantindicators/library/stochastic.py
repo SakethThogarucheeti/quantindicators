@@ -1,4 +1,4 @@
-"""Stochastic Oscillator â€” %K and %D."""
+"""Stochastic Oscillator — %K and %D."""
 
 from __future__ import annotations
 

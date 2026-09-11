@@ -1,4 +1,4 @@
-"""Stochastic RSI â€” RSI normalised within its own N-bar range."""
+"""Stochastic RSI — RSI normalised within its own N-bar range."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ class StochasticRSI(Indicator):
 
     StochRSI = (RSI - min(RSI, period)) / (max(RSI, period) - min(RSI, period))
 
-    Ranges [0, 100]. More sensitive than plain RSI â€” useful for picking
+    Ranges [0, 100]. More sensitive than plain RSI — useful for picking
     intraday and swing exhaustion points earlier.
 
     Returns None when insufficient bars.

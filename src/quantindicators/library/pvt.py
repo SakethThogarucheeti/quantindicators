@@ -1,4 +1,4 @@
-"""Price Volume Trend (z-scored) â€” cumulative volume-weighted price change."""
+"""Price Volume Trend (z-scored) — cumulative volume-weighted price change."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ class PVT(Indicator):
     Z-score = (raw_pvt - mean(raw_pvt_window)) / std(raw_pvt_window)
 
     Extreme z-scores signal that cumulative volume-weighted buying/selling
-    pressure is at a multi-period extreme â€” a potential mean-reversion setup.
+    pressure is at a multi-period extreme — a potential mean-reversion setup.
 
     Returns z-score (float); returns None when fewer than *period* + 1 bars
     are available or std of the window is zero.

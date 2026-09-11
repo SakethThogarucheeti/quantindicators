@@ -1,4 +1,4 @@
-"""Weekly RSI Proxy â€” RSI computed on 5-bar rolled closes (daily â†’ weekly)."""
+"""Weekly RSI Proxy — RSI computed on 5-bar rolled closes (daily → weekly)."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ class WeeklyRSI(Indicator):
     every *week_bars* bars (default 5 = 1 trading week). This approximates
     the weekly RSI without needing a separate weekly data feed.
 
-    Useful for daily-bar swing trading â€” the weekly RSI filters out
+    Useful for daily-bar swing trading — the weekly RSI filters out
     short-term noise and gives the higher-timeframe mean-reversion context.
 
     Signal extractor: negate (100 - weekly_rsi) for mean reversion.

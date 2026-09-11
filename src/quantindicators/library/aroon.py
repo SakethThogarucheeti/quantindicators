@@ -1,4 +1,4 @@
-"""Aroon Oscillator â€” measures recency of highs vs lows."""
+"""Aroon Oscillator — measures recency of highs vs lows."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ class Aroon(Indicator):
     oscillator = aroon_up - aroon_down
 
     Range [-100, 100].
-    Negative (recent lows) â†’ oversold swing setup â†’ mean reversion up.
+    Negative (recent lows) → oversold swing setup → mean reversion up.
 
     Signal extractor: negate (negative oscillator = potential reversal up).
 

@@ -1,4 +1,4 @@
-"""Squeeze Momentum â€” Bollinger/Keltner compression + momentum signal."""
+"""Squeeze Momentum — Bollinger/Keltner compression + momentum signal."""
 
 from __future__ import annotations
 
@@ -65,7 +65,7 @@ class SqueezeMomentum(Indicator):
         tr = true_range(highs, lows, closes)
         atr = wilder_ema(tr[-params.period :], params.period)
 
-        # squeeze_on = BB inside KC â€” available for callers that inspect squeeze state
+        # squeeze_on = BB inside KC — available for callers that inspect squeeze state
         self._squeeze_on = (sma + params.bb_k * std) <= (sma + params.kc_k * atr) and (
             sma - params.bb_k * std
         ) >= (sma - params.kc_k * atr)

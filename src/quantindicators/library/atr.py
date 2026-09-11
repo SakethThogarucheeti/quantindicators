@@ -18,7 +18,7 @@ class ATR(Indicator):
     True Range = max(H-L, |H-Cprev|, |L-Cprev|)
 
     Returns None when fewer than *period* bars are available.
-    Returns None when the computed ATR is zero (no price movement â€” stop
+    Returns None when the computed ATR is zero (no price movement — stop
     distance would be zero, making position sizing undefined).
     """
 

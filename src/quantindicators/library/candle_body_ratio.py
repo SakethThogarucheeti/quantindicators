@@ -1,4 +1,4 @@
-"""Candle Body Ratio â€” body size relative to total range."""
+"""Candle Body Ratio — body size relative to total range."""
 
 from __future__ import annotations
 
@@ -14,10 +14,10 @@ class CandleBodyRatio(Indicator):
 
     body  = |close - open|
     range = high - low
-    ratio = body / range   â†’ [0, 1]
+    ratio = body / range   → [0, 1]
 
-    High ratio â†’ conviction bar (strong move, low indecision).
-    Low ratio  â†’ doji / indecision (potential reversal).
+    High ratio → conviction bar (strong move, low indecision).
+    Low ratio  → doji / indecision (potential reversal).
 
     Returns the smoothed ratio over *period* bars so single-bar noise
     is reduced. Returns None when insufficient bars or all ranges are zero.

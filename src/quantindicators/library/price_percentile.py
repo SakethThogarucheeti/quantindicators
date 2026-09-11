@@ -1,4 +1,4 @@
-"""Price Percentile â€” where current close sits within its N-bar distribution."""
+"""Price Percentile — where current close sits within its N-bar distribution."""
 
 from __future__ import annotations
 
@@ -17,11 +17,11 @@ class PricePercentile(Indicator):
     Fraction of the last *period* closes that are below the current close,
     expressed as [0, 100].
 
-    0  â†’ current close is the lowest in the window (oversold)
-    100 â†’ current close is the highest (overbought)
+    0  → current close is the lowest in the window (oversold)
+    100 → current close is the highest (overbought)
 
-    More robust than Bollinger %B â€” makes no Gaussian assumption.
-    Signal extractor: negate (low percentile = oversold â†’ reversal up).
+    More robust than Bollinger %B — makes no Gaussian assumption.
+    Signal extractor: negate (low percentile = oversold → reversal up).
 
     Returns None when insufficient bars.
     """

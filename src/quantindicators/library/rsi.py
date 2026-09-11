@@ -16,7 +16,7 @@ class RSI(Indicator):
     RSI using Wilder smoothing (alpha = 1/period).
 
     Consistent with the existing TechnicalFeatureEngine implementation:
-    - Returns None when avg_loss == 0 (flat or purely up market â€” RSI is
+    - Returns None when avg_loss == 0 (flat or purely up market — RSI is
       undefined rather than 100, preventing false overbought signals).
     - Returns None when fewer than *period* bars are available.
     """
@@ -42,7 +42,7 @@ class RSI(Indicator):
         avg_loss = wilder_ema(losses, params.period)
 
         if avg_loss == 0.0:
-            return None  # undefined â€” flat or one-sided uptrend
+            return None  # undefined — flat or one-sided uptrend
 
         rs = avg_gain / avg_loss
         return 100.0 - 100.0 / (1.0 + rs)

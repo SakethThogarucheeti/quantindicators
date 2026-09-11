@@ -1,4 +1,4 @@
-"""Elder Ray â€” Bull/Bear Power relative to EMA."""
+"""Elder Ray — Bull/Bear Power relative to EMA."""
 
 from __future__ import annotations
 
@@ -20,16 +20,16 @@ def _ema(values: np.ndarray, period: int) -> float:
 
 class ElderRay(Indicator):
     """
-    Elder Ray Index â€” Bull Power and Bear Power combined.
+    Elder Ray Index — Bull Power and Bear Power combined.
 
     bull_power = high - EMA(close, period)
     bear_power = low  - EMA(close, period)
     elder_ray  = bull_power + bear_power  (net power)
 
-    Positive â†’ price action above EMA (bullish context).
-    Negative â†’ price action below EMA (bearish context, mean reversion up).
+    Positive → price action above EMA (bullish context).
+    Negative → price action below EMA (bearish context, mean reversion up).
 
-    Signal extractor: negate (negative elder_ray = oversold stretch â†’ reversal).
+    Signal extractor: negate (negative elder_ray = oversold stretch → reversal).
 
     Returns None when insufficient bars.
     """

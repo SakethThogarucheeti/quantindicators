@@ -1,4 +1,4 @@
-"""Gap Size â€” session open gap relative to previous close."""
+"""Gap Size — session open gap relative to previous close."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ class GapSize(Indicator):
     consecutive bars (works for any intraday interval up to 30min).
 
     Returns the gap % for every bar in the current session (constant within
-    the session â€” the open does not change). Returns None if only one
+    the session — the open does not change). Returns None if only one
     session is present in the buffer (no previous close available) or if
     prev_close is zero.
     """
@@ -49,7 +49,7 @@ class GapSize(Indicator):
                 break
 
         if session_start_idx is None:
-            # All bars in same session â€” no previous session close available
+            # All bars in same session — no previous session close available
             return None
 
         session_open = float(rows[session_start_idx]["open"])

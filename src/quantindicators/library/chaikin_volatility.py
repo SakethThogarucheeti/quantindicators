@@ -1,4 +1,4 @@
-"""Chaikin Volatility â€” rate of change in the EMA of H-L spread."""
+"""Chaikin Volatility — rate of change in the EMA of H-L spread."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ class ChaikinVolatility(Indicator):
     EMA of (High - Low) over *ema_period* bars.
     CV = 100 * (EMA_now - EMA[roc_period ago]) / EMA[roc_period ago]
 
-    Rising CV â†’ expanding volatility; falling â†’ contracting.
+    Rising CV → expanding volatility; falling → contracting.
     Returns None when insufficient data or the reference EMA is zero.
     """
 

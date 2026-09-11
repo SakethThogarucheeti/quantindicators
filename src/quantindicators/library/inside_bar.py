@@ -1,4 +1,4 @@
-"""Inside Bar â€” coiling / compression before a swing move."""
+"""Inside Bar — coiling / compression before a swing move."""
 
 from __future__ import annotations
 
@@ -13,13 +13,13 @@ class InsideBar(Indicator):
     """
     Inside Bar ratio.
 
-    An inside bar is one where high < prev_high and low > prev_low â€”
+    An inside bar is one where high < prev_high and low > prev_low —
     the bar is completely contained within the previous bar's range.
 
     Returns the fraction of the last *period* bars that are inside bars,
     as a value in [0, 1]. High reading = compression / coiling.
 
-    Not directly a directional signal â€” combine with RSI direction.
+    Not directly a directional signal — combine with RSI direction.
     As-is: high value = compressed volatility (often precedes breakout).
 
     Returns None when insufficient bars.

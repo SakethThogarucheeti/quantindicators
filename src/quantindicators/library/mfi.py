@@ -1,4 +1,4 @@
-"""Money Flow Index â€” volume-weighted RSI."""
+"""Money Flow Index — volume-weighted RSI."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ class MFI(Indicator):
         neg_mf = sum(raw_mf[i] for i in range(1, len(rows)) if tp[i] < tp[i - 1])
 
         if neg_mf == 0.0:
-            return None  # all up â€” undefined, same convention as RSI
+            return None  # all up — undefined, same convention as RSI
         return 100.0 - 100.0 / (1.0 + pos_mf / neg_mf)
 
     def __repr__(self) -> str:
