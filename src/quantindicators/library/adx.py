@@ -52,26 +52,39 @@ class ADX(Indicator):
         plus_dm = np.where((up_move > down_move) & (up_move > 0), up_move, 0.0)
         minus_dm = np.where((down_move > up_move) & (down_move > 0), down_move, 0.0)
 
-        smoothed_tr = wilder_ema(tr[1:], params.period)
-        smoothed_plus = wilder_ema(plus_dm, params.period)
-        smoothed_minus = wilder_ema(minus_dm, params.period)
+        smoothed_tr_series = wilder_ema(tr[1:], params.period, return_series=True)
+        smoothed_plus_series = wilder_ema(plus_dm, params.period, return_series=True)
+        smoothed_minus_series = wilder_ema(minus_dm, params.period, return_series=True)
 
+        smoothed_tr = smoothed_tr_series[-1]
         if smoothed_tr == 0.0:
             return None
 
-        plus_di = 100.0 * smoothed_plus / smoothed_tr
-        minus_di = 100.0 * smoothed_minus / smoothed_tr
+        plus_di = 100.0 * smoothed_plus_series[-1] / smoothed_tr
+        minus_di = 100.0 * smoothed_minus_series[-1] / smoothed_tr
 
         di_sum = plus_di + minus_di
         if di_sum == 0.0:
             return None
 
-        dx = 100.0 * abs(plus_di - minus_di) / di_sum
+        # ADX is the Wilder EMA of DX, not a single DX reading -- build the
+        # per-bar DX series over the fetched window, then smooth it the same
+        # way TR/+DM/-DM were smoothed above.
+        with np.errstate(divide="ignore", invalid="ignore"):
+            plus_di_series = np.where(
+                smoothed_tr_series != 0.0, 100.0 * smoothed_plus_series / smoothed_tr_series, 0.0
+            )
+            minus_di_series = np.where(
+                smoothed_tr_series != 0.0, 100.0 * smoothed_minus_series / smoothed_tr_series, 0.0
+            )
+            di_sum_series = plus_di_series + minus_di_series
+            dx_series = np.where(
+                di_sum_series != 0.0,
+                100.0 * np.abs(plus_di_series - minus_di_series) / di_sum_series,
+                0.0,
+            )
 
-        # ADX is the Wilder EMA of DX â€” approximate with the current DX value
-        # (a full rolling DX series would require more history; this is the
-        # standard single-pass approximation used by most charting packages)
-        adx = dx
+        adx = wilder_ema(dx_series, params.period)
         return float(adx), float(plus_di), float(minus_di)
 
     def __repr__(self) -> str:
